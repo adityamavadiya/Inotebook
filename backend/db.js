@@ -4,7 +4,11 @@ const mongoURI =
 
 const connectToMongo = async () => {
   try {
-    await mongoose.connect(mongoURI);
+    await mongoose.connect(mongoURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      bufferCommands: false, // Disable command buffering
+    });
     console.log(`Mongodb connected successfully!!`);
   } catch (error) {
     console.log(`Mongodb Server Issue ${error}`);

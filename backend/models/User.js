@@ -23,5 +23,15 @@ const UserSchema = new Schema({
     default: Date.now,
   },
 });
+const User = mongoose.model("user", UserSchema);
+// const func = async () => {
+//   try {
+//     await User.createIndexes();
+//     console.log("Indexes created successfully.");
+//   } catch (error) {
+//     console.error("Error creating indexes:", error);
+//   }
+// };
 
-module.exports = mongoose.model("user", UserSchema);
+// func();
+module.exports = User;

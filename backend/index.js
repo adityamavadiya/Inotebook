@@ -4,7 +4,7 @@ const app = express();
 
 connectToMongo();
 
-const port = 3000;
+const port = 5000;
 
 app.use(express.json());
 app.get("/", (req, res) => {
@@ -16,5 +16,5 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/notes", require("./routes/notes"));
 
 app.listen(port, () => {
-  console.log(`Process running in 3000 port`);
+  console.log(`Process running in ${port} port`);
 });
