@@ -47,11 +47,16 @@ const AddNote = () => {
               onChange={onChange}
             />
           </div>
-          <div className="form-check">
+
+          <div className="form-group">
+            <label htmlFor="exampleInputPassword1">Tag</label>
             <input
-              type="checkbox"
-              className="form-check-input"
-              id="exampleCheck1"
+              type="text"
+              className="form-control"
+              id="tag"
+              placeholder="Tag"
+              name="tag"
+              onChange={onChange}
             />
           </div>
           <button
