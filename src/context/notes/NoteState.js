@@ -59,18 +59,7 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ title, description, tag }), // body data type must match "Content-Type" header
     });
-    const note = response.json(); // parses JSON response into native JavaScript objects
-    // a++;
-    // const note = {
-    //   _id: "aa7cec7f1a67f3c90c38eaa81" + a,
-    //   user: "647b0ef26a83a8fef85b6b20",
-    //   title: title,
-    //   description: description,
-    //   tag: tag,
-    //   date: "2023-06-04T19:56:47.394Z",
-    //   __v: 0,
-    // };
-
+    const note = await response.json(); // parses JSON response into native JavaScript objects
     setNotes(notes.concat(note));
   };
 
@@ -97,9 +86,10 @@ const NoteState = (props) => {
 
   // Edit a note
   const editNote = async (id, title, description, tag) => {
+    console.log("hello!");
     const data = 0;
     const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "auth-token":
@@ -107,19 +97,21 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ title, description, tag }), // body data type must match "Content-Type" header
     });
-    const json = response.json(); // parses JSON response into native JavaScript objects
+    const json = await response.json(); // parses JSON response into native JavaScript objects
+    console.log(json);
 
+    let newNotes = JSON.parse(JSON.stringify(notes));
     // logic to edit notes
-    for (let index = 0; index < notes.length; index++) {
-      const element = notes[index];
+    for (let index = 0; index < newNotes.length; index++) {
+      const element = newNotes[index];
       if (element._id === id) {
-        notes[index].title = title;
-        notes[index].description = description;
-        notes[index].tag = tag;
+        newNotes[index].title = title;
+        newNotes[index].description = description;
+        newNotes[index].tag = tag;
         break;
       }
     }
-    setNotes(notes);
+    setNotes(newNotes);
   };
   return (
     <NoteContext.Provider

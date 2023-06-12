@@ -5,21 +5,24 @@ import AddNote from "./AddNote";
 
 const Notes = () => {
   const context = useContext(noteContext);
-  const { notes, getNotes } = context;
+  const { notes, getNotes, editNote } = context;
   useEffect(() => {
     getNotes();
   }, []);
 
   const [note, setNote] = useState({
+    id: "",
     etitle: "",
     edescription: "",
     etag: "",
   });
 
   const ref = useRef("null");
+  const refClose = useRef("null");
   const updateNote = (currentnote) => {
     ref.current.click();
     setNote({
+      id: currentnote._id,
       etitle: currentnote.title,
       edescription: currentnote.description,
       etag: currentnote.tag,
@@ -28,12 +31,29 @@ const Notes = () => {
 
   const handleClick = (e) => {
     e.preventDefault();
+    console.log("hello!");
+    editNote(note.id, note.etitle, note.edescription, note.etag);
+    refClose.current.click();
   };
 
-  const onChange = (e) => {
+  const onChange1 = (e) => {
     e.preventDefault();
-    setNote({ ...note, [e.target.name]: e.target.value });
+    // setNote({ ...note, [e.target.name]: e.target.value });
+    setNote({ ...note, etitle: e.target.value });
   };
+
+  const onChange2 = (e) => {
+    e.preventDefault();
+    // setNote({ ...note, [e.target.name]: e.target.value });
+    setNote({ ...note, edescription: e.target.value });
+  };
+
+  const onChange3 = (e) => {
+    e.preventDefault();
+    // setNote({ ...note, [e.target.name]: e.target.value });
+    setNote({ ...note, etag: e.target.value });
+  };
+
   return (
     <>
       <AddNote />
@@ -79,7 +99,9 @@ const Notes = () => {
                     placeholder="Enter Title"
                     name="title"
                     value={note.etitle}
-                    onChange={onChange}
+                    onChange={onChange1}
+                    minLength={5}
+                    required
                   />
                 </div>
                 <div className="form-group">
@@ -91,7 +113,9 @@ const Notes = () => {
                     placeholder="Description"
                     name="description"
                     value={note.edescription}
-                    onChange={onChange}
+                    onChange={onChange2}
+                    minLength={5}
+                    required
                   />
                 </div>
 
@@ -104,7 +128,7 @@ const Notes = () => {
                     placeholder="Tag"
                     name="tag"
                     value={note.etag}
-                    onChange={onChange}
+                    onChange={onChange3}
                   />
                 </div>
               </form>
@@ -116,10 +140,16 @@ const Notes = () => {
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
                 onClick={handleClick}
+                ref={refClose}
               >
                 Close
               </button>
-              <button type="button" className="btn btn-primary">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleClick}
+                disabled={note.etag.length < 5 || note.edescription.length < 5}
+              >
                 Update Note
               </button>
             </div>

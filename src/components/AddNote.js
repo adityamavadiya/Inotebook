@@ -34,6 +34,9 @@ const AddNote = () => {
               placeholder="Enter Title"
               name="title"
               onChange={onChange}
+              value={note.title}
+              minLength={5}
+              required
             />
           </div>
           <div className="form-group">
@@ -45,6 +48,9 @@ const AddNote = () => {
               placeholder="Description"
               name="description"
               onChange={onChange}
+              value={note.description}
+              minLength={5}
+              required
             />
           </div>
 
@@ -56,6 +62,7 @@ const AddNote = () => {
               id="tag"
               placeholder="Tag"
               name="tag"
+              value={note.tag}
               onChange={onChange}
             />
           </div>
@@ -63,6 +70,7 @@ const AddNote = () => {
             type="submit"
             className="btn btn-primary"
             onClick={handleClick}
+            disabled={note.tag.length < 5 || note.description.length < 5}
           >
             Submit
           </button>
