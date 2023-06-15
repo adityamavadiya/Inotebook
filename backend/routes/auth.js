@@ -14,10 +14,11 @@ router.post(
     body("email", "Email must be valid").isEmail(),
   ],
   async (req, res) => {
+    let success = false;
     console.log("hello");
     const result = validationResult(req);
     if (!result.isEmpty()) {
-      return res.status(400).json({ errors: result.array() });
+      return res.status(400).json({ success, errors: result.array() });
     }
     console.log(req.body);
     // find if user already exists
@@ -39,9 +40,9 @@ router.post(
         };
         const authToken = jwt.sign(data, JWT_SECRET);
         // console.log(jwtData);
-        res.json({ authToken });
+        res.json({ success: true, authToken });
       })
-      .catch((err) => res.json({ error: err }));
+      .catch((err) => res.json({ success: false, errors: err }));
   }
 );
 
@@ -67,14 +68,15 @@ router.post(
 
     const { email, password } = req.body;
     try {
+      let success = false;
       let user = await User.findOne({ email: email });
       if (!user) {
-        res.status(400).json({ error: "Email doesn't exist!" });
+        res.status(400).json({ success, error: "Email doesn't exist!" });
       }
 
       const passwordCompare = bcryptjs.compare(password, user.password);
       if (!password) {
-        return res.status(400).json({ error: "Invalid credentials!" });
+        return res.status(400).json({ success, error: "Invalid credentials!" });
       }
 
       const data = {
@@ -82,9 +84,10 @@ router.post(
           id: user.id,
         },
       };
-
+      success = true;
       const authtoken = jwt.sign(data, JWT_SECRET);
-      res.json(authtoken);
+      console.log("here!");
+      res.json({ success, authtoken });
     } catch (err) {
       console.log(err);
       res.status(500).send("Some error occured!");
